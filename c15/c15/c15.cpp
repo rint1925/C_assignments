@@ -6,16 +6,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define BUFFLENGTH 1024
 
 typedef struct player { char *name; char *stoneSymbol; int playerId;};
 
-//盤面を表示する関数
-void dispBoard(int board[10][10]){
+FILE *fp; //ファイルポインタ
+
+//盤面を表示する関数（また、引数で与えられた変数にも同じものを書き込む）
+void dispBoard(int board[10][10], char stream[1024]){
 	int i, j; //インデックス
-	char str[BUFFLENGTH] = " 1 2 3 4 5 6 7 8"; //出力用
+	char str[1024] = " 1 2 3 4 5 6 7 8"; //出力用
 	for (i = 0; i < 8; i++) {
-		char tmp[BUFFLENGTH];
+		char tmp[1024];
 		sprintf_s(tmp, "\n%d", i+1);
 
 		for (j = 0; j < 8; j++) {
@@ -37,6 +38,8 @@ void dispBoard(int board[10][10]){
 	}
 	strcat_s(str, "\n"); //最後に改行
 	fprintf_s(stdout, str);
+	strcpy_s(stream,1024,str);
+	
 }
 
 
@@ -164,7 +167,9 @@ void play(player p1, player p2) {
 	int p1Score = 0;
 	int	p2Score = 0;
 
-	player tmp; //一時的に使用
+	//一時的に使用
+	player tmp;
+	char txtBuf[1024];
 	int i, j;
 
 	//最初に石を置くプレーヤーと,その相手
@@ -185,17 +190,28 @@ void play(player p1, player p2) {
 		{ -1,-1,-1,-1,-1,-1,-1,-1,-1 }
 	};
 
-	//プレーヤーの各ターン
 
+	//ファイル書き込み準備
+	FILE *fp;
+	errno_t error = fopen_s(&fp,"gameLog.txt","w");
+	
+
+
+	//プレーヤーの各ターン
 	int placeNums[64] = { 0 };
+
+	
 
 	while (1) {
 		int placeNums[64] = { 0 };
-		dispBoard(board); //盤面を表示
+		dispBoard(board,txtBuf); //盤面を表示
+		fputs(txtBuf, fp);
 
 		//currentPlayerの石を置く場所がない場合
 		if (!scanPlaced(placeNums,board,currentPlayer.playerId)){
-			fprintf_s(stdout, "%sさんの石を置けるマスがありません,パスします\n", currentPlayer.name);
+			sprintf_s(txtBuf, "%sさんの石を置けるマスがありません,パスします\n", currentPlayer.name);
+			fprintf_s(stdout, txtBuf);
+			fputs(txtBuf, fp);
 
 			//更に、相手も石を置けない場合
 			if (!scanPlaced(placeNums, board, opponentPlayer.playerId)) {
@@ -209,15 +225,20 @@ void play(player p1, player p2) {
 		}
 
 
-		//
-		fprintf_s(stdout, "%s(%s)さんの番です [ ", currentPlayer.name,currentPlayer.stoneSymbol);
+		//石が置ける場合
+		sprintf_s(txtBuf, "\n%s(%s)さんの番です  ", currentPlayer.name,currentPlayer.stoneSymbol);
+		fprintf_s(stdout, txtBuf);
+		fputs(txtBuf, fp);
+
 		int ptr = 0;
 		while (placeNums[ptr] != 0) {
 			fprintf_s(stdout, "%d ", placeNums[ptr]);
 			ptr++;
 		}
-		fprintf_s(stdout, "] の中から置く場所を選択してください");
+		fprintf_s(stdout, "  の中から置く場所を選択してください");
 		int selectedPlace = getPlayerInput(board, currentPlayer); //currentPlayerの入力を受ける
+		sprintf_s(txtBuf, "%s(%s)さんの入力>>>%d\n",currentPlayer.name,currentPlayer.stoneSymbol,selectedPlace);
+		fputs(txtBuf, fp);
 		putAndReverse(board, currentPlayer, opponentPlayer, selectedPlace / 10, selectedPlace % 10); //相手の石を裏返す
 		
 		//攻守の入れ替え
@@ -237,8 +258,10 @@ void play(player p1, player p2) {
 		}
 	}
 	
-	fprintf_s(stdout, "ゲーム終了!\n【対戦結果】○=%d, ●=%d",p1Score,p2Score);
-
+	sprintf_s(txtBuf, "ゲーム終了!\n【対戦結果】○=%d, ●=%d",p1Score,p2Score);
+	fprintf_s(stdout, txtBuf);
+	fputs(txtBuf, fp);
+	fclose(fp);
 }
 
 
