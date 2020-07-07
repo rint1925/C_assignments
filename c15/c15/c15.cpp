@@ -151,7 +151,7 @@ int main()
 	//ƒ‹[ƒv
 	while (1) {
 		int flag;
-		fprintf_s(stdout, "Œ»Ý‚ÌÝ’è‚ÍyæUz%s‚³‚ñAyŒãUz%s‚³‚ñ‚Å‚·\n[1]ƒQ[ƒ€ŠJŽn, [‚Q]æUŒãU‚ð‹t‚É‚µ‚ÄƒQ[ƒ€ŠJŽn >>>",p1.name,p2.name);
+		fprintf_s(stdout, "Œ»Ý‚ÌÝ’è‚ÍyæUz%s‚³‚ñAyŒãUz%s‚³‚ñ‚Å‚·\n[1]ƒQ[ƒ€ŠJŽn, [‚Q]æUŒãU‚ð‹t‚É‚µ‚ÄƒQ[ƒ€ŠJŽn (1@2 ˆÈŠO‚ð“ü—Í‚·‚é‚ÆI—¹)>>>",p1.name,p2.name);
 		scanf_s("%d", &flag);
 		fprintf_s(stdout, "\n");
 
