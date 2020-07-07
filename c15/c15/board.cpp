@@ -1,11 +1,10 @@
+// board.cpp : 盤面に関する関数を集めたプログラム
+
 #include "stdafx.h"
 #include "board.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-
-
 
 //盤面を表示する関数（また、引数で与えられた変数にも同じものを書き込む）
 void dispBoard(int board[10][10], char stream[1024]) {
@@ -103,35 +102,7 @@ bool scanPlaced(int placeNums[64], int board[10][10], int playerId) {
 
 
 
-//プレイヤーの入力を受け取って、11~88の値を返す
-int getPlayerInput(int board[10][10], player p) {
 
-	int placeNum;
-	int x, y;
-
-	//fprintf_s(stdout, "%sさんの手を入力してください",p.name);
-	while (1) {
-		fprintf_s(stdout, " >>>");
-		scanf_s("%d", &placeNum);
-
-		if (placeNum < 11 || placeNum >88) {
-			fprintf_s(stdout, "11から88の値を入力してください");
-			continue;
-		}
-
-		x = placeNum / 10;
-		y = placeNum % 10;
-
-		if (isPlaced(board, p.playerId, x, y)) {
-			return placeNum;
-		}
-		else {
-			fprintf_s(stdout, "この場所には石を置けません.他の場所を指定してください");
-			continue;
-		}
-
-	}
-}
 
 
 //石を置いて相手の石を裏返す

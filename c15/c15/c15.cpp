@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "Setting.h"
 #include "board.h"
+#include "player.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,7 +14,6 @@ void play(player p1, player p2) {
 
 	p1.playerId = 1;
 	p2.playerId = 2;
-
 	int p1Score = 0;
 	int	p2Score = 0;
 
@@ -47,11 +47,11 @@ void play(player p1, player p2) {
 
 
 
-	//ƒvƒŒ[ƒ„[‚ÌŠeƒ^[ƒ“
+	//’u‚¯‚éêŠ‚Ì”z—ñ
 	int placeNums[64] = { 0 };
 
 
-
+	//ƒvƒŒ[ƒ„[‚ÌŠeƒ^[ƒ“
 	while (1) {
 		int placeNums[64] = { 0 };
 		dispBoard(board, txtBuf); //”Õ–Ê‚ð•\Ž¦
@@ -146,10 +146,12 @@ int main()
 	readChar(section, keyWord, "none", p2Name, settingFile);
 	p2.name = p2Name;
 
+	fprintf_s(stdout, "ƒIƒZƒƒQ[ƒ€‚Ö‚æ‚¤‚±‚»I\n\n");
+
 	//ƒ‹[ƒv
 	while (1) {
 		int flag;
-		fprintf_s(stdout, "ƒIƒZƒƒQ[ƒ€‚Ö‚æ‚¤‚±‚»I\nŒ»Ý‚ÌÝ’è‚ÍyæUz%s‚³‚ñAyŒãUz%s‚³‚ñ‚Å‚·\n[1]ƒQ[ƒ€ŠJŽn, [‚Q]æUŒãU‚ð‹t‚É‚µ‚ÄƒQ[ƒ€ŠJŽn >>>",p1.name,p2.name);
+		fprintf_s(stdout, "Œ»Ý‚ÌÝ’è‚ÍyæUz%s‚³‚ñAyŒãUz%s‚³‚ñ‚Å‚·\n[1]ƒQ[ƒ€ŠJŽn, [‚Q]æUŒãU‚ð‹t‚É‚µ‚ÄƒQ[ƒ€ŠJŽn >>>",p1.name,p2.name);
 		scanf_s("%d", &flag);
 		fprintf_s(stdout, "\n");
 
